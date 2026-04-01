@@ -37,10 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(NewUserRequest newUserRequest) {
         log.info("Создание пользователя с email={}", newUserRequest.getEmail());
-        if (userRepository.findUserByEmail(newUserRequest.getEmail()).isPresent()) {
-            log.warn("Пользователь с email={} существует", newUserRequest.getEmail());
-            throw new ConflictException("Пользователь с email " + newUserRequest.getEmail() + " существует");
-        }
+        checkEmail(newUserRequest.getEmail(), null);
         User user = UserMapper.mapToUser(newUserRequest);
         return UserMapper.mapToUserDto(userRepository.save(user));
     }
@@ -49,10 +46,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UpdateUserRequest request) {
         log.info("Обновление пользователя id={}", id);
         User user = findUserOrThrow(id);
-        if (userRepository.findUserByEmail(request.getEmail()).isPresent()) {
-            log.warn("Пользователь с email={} существует", request.getEmail());
-            throw new ConflictException("Пользователь с email " + request.getEmail() + " существует");
-        }
+        checkEmail(request.getEmail(), id);
         User updatedUser = UserMapper.updateUserFields(user, request);
         User saved = userRepository.updateUser(updatedUser);
         log.info("Пользователь обновлён id={}", id);
@@ -73,6 +67,13 @@ public class UserServiceImpl implements UserService {
                     log.warn("Пользователь не неайден с id={}", id);
                     return new NotFoundException("Пользователь с id " + id + " не найден");
                 });
+    }
+
+    private void checkEmail(String email, Long userId) {
+        if (userRepository.findUserByEmail(email, userId).isPresent()) {
+            log.warn("Пользователь с email={} существует", email);
+            throw new ConflictException("Пользователь с email " + email + " существует");
+        }
     }
 
 }
