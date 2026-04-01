@@ -49,7 +49,15 @@ public class MemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
-        return Optional.ofNullable(usersByEmail.get(email));
+    public Optional<User> findUserByEmail(String email, Long userId) {
+        User user = usersByEmail.get(email);
+        if (user == null) {
+            return Optional.empty();
+        }
+
+        if (userId != null && user.getId().equals(userId)) {
+            return Optional.empty();
+        }
+        return Optional.of(user);
     }
 }
