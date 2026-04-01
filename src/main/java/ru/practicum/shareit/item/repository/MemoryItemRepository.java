@@ -26,7 +26,7 @@ public class MemoryItemRepository implements ItemRepository {
         List<Item> itemList = usersItems.get(userId);
         for (int i = 0; i < itemList.size(); i++) {
             if (itemList.get(i).getId().equals(item.getId())) {
-                itemList.add(i, item);
+                itemList.set(i, item);
                 break;
             }
         }
