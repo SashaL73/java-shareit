@@ -4,13 +4,9 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-item-requests.
- */
 @Data
-public class ItemRequestDto {
-    private Long id;
+public class NewItemRequestDto {
     private String description;
-    private Long idRequestor;
+    private Long idRequester;
     private LocalDateTime created;
 }
