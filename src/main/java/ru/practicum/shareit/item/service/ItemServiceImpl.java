@@ -73,7 +73,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemOwnerDto findItemById(Long itemId , Long userId) {
+    public ItemOwnerDto findItemById(Long itemId, Long userId) {
         log.debug("Получение вещи id={}", itemId);
         LocalDateTime now = LocalDateTime.now();
         Item item = findItemOrThrow(itemId);
@@ -83,7 +83,7 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
 
         if (!item.getOwner().getId().equals(userId)) {
-            return ItemMapper.mapToItemOwnerDto(item,null, null,commentDtoList);
+            return ItemMapper.mapToItemOwnerDto(item, null, null, commentDtoList);
         }
 
         Booking lastBookings = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now)
@@ -91,7 +91,7 @@ public class ItemServiceImpl implements ItemService {
         Booking nextBookings = bookingRepository.findFirstByItemIdAndStartBeforeOrderByStartDesc(itemId, now)
                 .orElse(null);
 
-        return ItemMapper.mapToItemOwnerDto(item,lastBookings,nextBookings,commentDtoList);
+        return ItemMapper.mapToItemOwnerDto(item, lastBookings, nextBookings, commentDtoList);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class ItemServiceImpl implements ItemService {
 
         Map<Long, Booking> nextBookings = bookingRepository.findNextBookings(itemIds, now).stream()
                 .collect(Collectors.toMap(
-                b -> b.getItem().getId(), Function.identity()));
+                        b -> b.getItem().getId(), Function.identity()));
 
         Map<Long, List<CommentDto>> commentsByItemId = commentRepository
                 .findAllByItemIdInOrderByDateOfCommentAsc(itemIds).stream()
@@ -121,20 +121,21 @@ public class ItemServiceImpl implements ItemService {
 
         return items.stream()
                 .map(item -> ItemMapper.mapToItemOwnerDto(
-                        item, lastBookings.get(item.getId()), nextBookings.get(item.getId()), commentsByItemId.get(item.getId()) ))
+                        item, lastBookings.get(item.getId()), nextBookings.get(item.getId()), commentsByItemId.get(item.getId())))
                 .toList();
     }
 
     @Override
     public List<ItemDto> searchItem(String text) {
         log.debug("Поиск вещей по тексту='{}'", text);
-        if(text == null || text.isBlank()) {
+        if (text == null || text.isBlank()) {
             return new ArrayList<>();
         }
         return itemRepository.search(text).stream()
                 .map(ItemMapper::mapToItemDto)
                 .toList();
     }
+
     @Transactional
     @Override
     public CommentDto saveComment(Long userId, Long itemId, NewCommentRequest request) {
@@ -153,7 +154,7 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Пользователь не может оставить комментарий");
         }
 
-        Comment comment = CommentMapper.mapToComment(user,item,request);
+        Comment comment = CommentMapper.mapToComment(user, item, request);
         comment = commentRepository.save(comment);
 
         return CommentMapper.mapToCommentDto(comment);

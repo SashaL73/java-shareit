@@ -28,9 +28,9 @@ import java.util.List;
 @Slf4j
 @Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
-    final private BookingRepository bookingRepository;
-    final private UserRepository userRepository;
-    final private ItemRepository itemRepository;
+    private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
 
     @Transactional

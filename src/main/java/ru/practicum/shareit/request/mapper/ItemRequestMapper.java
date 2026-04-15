@@ -6,8 +6,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.NewItemRequestDto;
 import ru.practicum.shareit.user.User;
 
-import java.time.LocalDateTime;
-
 public class ItemRequestMapper {
 
     public static ItemRequest mapToItemRequest(NewItemRequestDto request, User requestor) {
@@ -22,7 +20,6 @@ public class ItemRequestMapper {
         ItemRequestDto dto = new ItemRequestDto();
         dto.setId(itemRequest.getId());
         dto.setDescription(itemRequest.getDescription());
-        //dto.setCreated(itemRequest.getCreated());
         return dto;
     }
 }
