@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
         User user = findUserOrThrow(id);
         checkEmail(request.getEmail(), id);
         User updatedUser = UserMapper.updateUserFields(user, request);
-        User saved = userRepository.updateUser(updatedUser);
+        User saved = userRepository.save(updatedUser);
         log.info("Пользователь обновлён id={}", id);
         return UserMapper.mapToUserDto(saved);
     }
@@ -57,12 +57,12 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         log.info("Удаление пользователя id={}", id);
         findUserOrThrow(id);
-        userRepository.deleteUser(id);
+        userRepository.deleteById(id);
         log.info("Пользователь удалён id={}", id);
     }
 
     private User findUserOrThrow(Long id) {
-        return userRepository.getUserById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Пользователь не неайден с id={}", id);
                     return new NotFoundException("Пользователь с id " + id + " не найден");
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkEmail(String email, Long userId) {
-        if (userRepository.findUserByEmail(email, userId).isPresent()) {
+        if (userRepository.findByEmailAndIdNot(email, userId).isPresent()) {
             log.warn("Пользователь с email={} существует", email);
             throw new ConflictException("Пользователь с email " + email + " существует");
         }

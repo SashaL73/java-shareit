@@ -1,11 +1,13 @@
 package ru.practicum.shareit.item.mapper;
 
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemRequest;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.booking.Booking;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
+
+import java.util.List;
 
 @NoArgsConstructor
 public class ItemMapper {
@@ -25,6 +27,24 @@ public class ItemMapper {
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
         return itemDto;
+    }
+
+    public static ItemOwnerDto mapToItemOwnerDto(Item item, Booking last, Booking next, List<CommentDto> commentDtoList) {
+        ItemOwnerDto itemOwnerDto = new ItemOwnerDto();
+        itemOwnerDto.setId(item.getId());
+        itemOwnerDto.setName(item.getName());
+        itemOwnerDto.setDescription(item.getDescription());
+        itemOwnerDto.setAvailable(item.getAvailable());
+        if (last != null) {
+            itemOwnerDto.setLastBooking(new BookingShortDto(
+                    last.getId(), last.getBooker().getId(), last.getStart(), last.getEnd()));
+        }
+        if (next != null) {
+            itemOwnerDto.setNextBooking(new BookingShortDto(
+                    next.getId(), next.getBooker().getId(), next.getStart(), next.getEnd()));
+        }
+        itemOwnerDto.setComments(commentDtoList);
+        return itemOwnerDto;
     }
 
     public static Item updateItemFields(Item item, UpdateItemRequest request) {
