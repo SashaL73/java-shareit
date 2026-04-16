@@ -86,12 +86,12 @@ public class ItemServiceImpl implements ItemService {
             return ItemMapper.mapToItemOwnerDto(item, null, null, commentDtoList);
         }
 
-        Booking lastBookings = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now)
+        Booking lastBooking = bookingRepository.findFirstByItemIdAndStartBeforeOrderByStartDesc(itemId, now)
                 .orElse(null);
-        Booking nextBookings = bookingRepository.findFirstByItemIdAndStartBeforeOrderByStartDesc(itemId, now)
+        Booking nextBooking = bookingRepository.findFirstByItemIdAndStartAfterOrderByStartAsc(itemId, now)
                 .orElse(null);
 
-        return ItemMapper.mapToItemOwnerDto(item, lastBookings, nextBookings, commentDtoList);
+        return ItemMapper.mapToItemOwnerDto(item, lastBooking, nextBooking, commentDtoList);
     }
 
     @Override
