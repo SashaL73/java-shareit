@@ -51,6 +51,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b " +
             "where b.item.id in :itemIds " +
             "and b.start < :now " +
+            "and b.status = BookingStatus.APPROVED " +
             "order by b.start desc"
     )
     List<Booking> findLastBookings(@Param("itemIds") List<Long> itemIds,
@@ -59,6 +60,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select b from Booking b " +
             "where b.item.id in :itemIds " +
             "and b.start > :now " +
+            "and b.status = BookingStatus.APPROVED " +
             "order by b.start asc"
     )
     List<Booking> findNextBookings(@Param("itemIds") List<Long> itemIds,
