@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
         LocalDateTime now = LocalDateTime.now();
         Item item = findItemOrThrow(itemId);
 
-        List<CommentDto> commentDtoList = commentRepository.findAllByItemId(itemId).stream()
+        List<CommentDto> commentDtoList = commentRepository.findAllByItemIdOrderByDateOfCommentAsc(itemId).stream()
                 .map(CommentMapper::mapToCommentDto)
                 .toList();
 
