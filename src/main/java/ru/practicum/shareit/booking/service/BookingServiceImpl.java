@@ -65,6 +65,11 @@ public class BookingServiceImpl implements BookingService {
         if (!ownerId.equals(booking.getItem().getOwner().getId())) {
             throw new ValidationException("Пользователь не является владельцем вещи");
         }
+
+        if (!booking.getStatus().equals(BookingStatus.WAITING)) {
+            throw new ValidationException("Статус нельзя изменить");
+        }
+
         if (approved) {
             booking.setStatus(BookingStatus.APPROVED);
         } else {
