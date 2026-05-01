@@ -37,8 +37,8 @@ public class BookingControllerTest {
     void bookItemShouldReturnResponseFromClient() throws Exception {
         BookItemRequestDto requestDto = BookItemRequestDto.builder()
                 .itemId(1L)
-                .start(LocalDateTime.of(2026, 5, 1, 10, 0))
-                .end(LocalDateTime.of(2026, 5, 2, 10, 0))
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
                 .build();
 
         ResponseEntity<Object> clientResponse = ResponseEntity.ok("SUCCESS");
@@ -107,7 +107,7 @@ public class BookingControllerTest {
     @Test
     void getAllBookingsByOwnerShouldReturnClientResponse() throws Exception {
         ResponseEntity<Object> clientResponse = ResponseEntity.ok("OWNER_LIST");
-        Mockito.when(bookingClient.findAllBookingByUserOrItemOwner(Mockito.anyLong(), Mockito.any(BookingState.class)))
+        Mockito.when(bookingClient.findAllBookingByItemOwner(Mockito.anyLong(), Mockito.any(BookingState.class)))
                 .thenReturn(clientResponse);
 
         mockMvc.perform(get("/bookings/owner")
@@ -117,7 +117,7 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("OWNER_LIST"));
 
-        Mockito.verify(bookingClient).findAllBookingByUserOrItemOwner(1L, BookingState.ALL);
+        Mockito.verify(bookingClient).findAllBookingByItemOwner(1L, BookingState.ALL);
     }
 
 }

@@ -53,8 +53,8 @@ public class BookingControllerTest {
 
     private NewBookingRequest requestDto = NewBookingRequest.builder()
             .itemId(1L)
-            .start(LocalDateTime.of(2026, 5, 1, 10, 0))
-            .end(LocalDateTime.of(2026, 5, 2, 10, 0))
+            .start(LocalDateTime.of(2026, 5, 20, 10, 0))
+            .end(LocalDateTime.of(2026, 5, 21, 10, 0))
             .build();
 
     @Test
