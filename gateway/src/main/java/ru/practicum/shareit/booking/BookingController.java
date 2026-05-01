@@ -6,14 +6,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookItemRequestDto;
 import ru.practicum.shareit.booking.dto.BookingState;
 
 
-@Controller
+@RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
 @Slf4j
@@ -48,17 +47,17 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> approved(@RequestHeader("X-Sharer-User-Id") long userId,
-                               @PathVariable Long bookingId,
-                               @RequestParam Boolean approved) {
+                                           @PathVariable Long bookingId,
+                                           @RequestParam Boolean approved) {
         log.info("Approved booking {}, userId={}, approved={}", bookingId, userId, approved);
         return bookingClient.approvedBooking(userId, bookingId, approved);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getAllBookingsByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
-                                                  @RequestParam(defaultValue = "ALL") BookingState state) {
+                                                        @RequestParam(defaultValue = "ALL") BookingState state) {
         log.info("Get all booking userId={}", userId);
-        return bookingClient.findAllBookingByUserOrItemOwner(userId, state);
+        return bookingClient.findAllBookingByItemOwner(userId, state);
     }
 
 }
